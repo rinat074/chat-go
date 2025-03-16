@@ -1,26 +1,28 @@
-.PHONY: proto build run test clean
+.PHONY: proto build-auth build-chat build-gateway build run clean
 
-# Генерация gRPC кода из .proto файлов
+# Генерация Protocol Buffers
 proto:
 	protoc --go_out=. --go_opt=paths=source_relative \
 		--go-grpc_out=. --go-grpc_opt=paths=source_relative \
-		proto/*.proto
+		proto/auth/*.proto proto/chat/*.proto
 
-# Сборка всех сервисов
-build:
-	cd services/auth-service && go build -o ../../bin/auth-service ./cmd
-	cd services/chat-service && go build -o ../../bin/chat-service ./cmd
-	cd services/gateway-service && go build -o ../../bin/gateway-service ./cmd
+# Сборка сервисов
+build-auth:
+	cd services/auth-service && go build -o ../../bin/auth-service
 
-# Запуск с помощью docker-compose
+build-chat:
+	cd services/chat-service && go build -o ../../bin/chat-service
+
+build-gateway:
+	cd services/gateway-service && go build -o ../../bin/gateway-service
+
+build: build-auth build-chat build-gateway
+
+# Запуск с помощью Docker Compose
 run:
 	docker-compose up -d
 
-# Тестирование
-test:
-	go test ./...
-
 # Очистка
 clean:
-	rm -rf bin/*
-	docker-compose down -v 
+	rm -rf bin/
+	docker-compose down 
