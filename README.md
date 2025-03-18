@@ -1,20 +1,36 @@
 # GoChat - Микросервисное приложение для чата
 
+[![CI/CD](https://github.com/rinat074/chat-go/actions/workflows/ci.yml/badge.svg)](https://github.com/rinat074/chat-go/actions/workflows/ci.yml)
+[![Go Report Card](https://goreportcard.com/badge/github.com/rinat074/chat-go)](https://goreportcard.com/report/github.com/rinat074/chat-go)
+[![Go Version](https://img.shields.io/github/go-mod/go-version/rinat074/chat-go)](https://go.dev/doc/devel/release)
+[![License](https://img.shields.io/github/license/rinat074/chat-go)](https://github.com/rinat074/chat-go/blob/main/LICENSE)
+
 Это микросервисное приложение для чата, разработанное на Go. Проект демонстрирует использование микросервисной архитектуры, gRPC для межсервисного взаимодействия и RESTful API для внешних клиентов.
 
 ## Структура проекта
 
 ```
 .
-├── docker-compose.yml    # Конфигурация Docker Compose для запуска всех сервисов
-├── Makefile              # Команды для сборки и запуска проекта
-├── proto/                # Определения Protocol Buffers
-│   ├── auth/             # Протоколы для сервиса аутентификации
-│   └── chat/             # Протоколы для чат-сервиса
-└── services/             # Микросервисы
-    ├── auth-service/     # Сервис аутентификации
-    ├── chat-service/     # Чат-сервис
-    └── gateway-service/  # API-шлюз
+├── .github/workflows/     # CI/CD конфигурация для GitHub Actions
+├── db/                    # Файлы для работы с базой данных
+│   ├── migrations/        # Миграции SQL
+│   └── init.sql           # Начальная схема базы данных
+├── docker-compose.yml     # Конфигурация Docker Compose
+├── Makefile               # Команды для сборки и запуска проекта
+├── monitoring/            # Конфигурация для мониторинга
+│   └── prometheus/        # Конфигурация Prometheus
+├── pkg/                   # Общие пакеты для всех сервисов
+│   ├── logger/            # Структурированное логирование
+│   ├── metrics/           # Метрики Prometheus
+│   ├── middleware/        # Общие middleware
+│   └── validator/         # Валидация входных данных
+├── proto/                 # Определения Protocol Buffers
+│   ├── auth/              # Протоколы для сервиса аутентификации
+│   └── chat/              # Протоколы для чат-сервиса
+└── services/              # Микросервисы
+    ├── auth-service/      # Сервис аутентификации
+    ├── chat-service/      # Чат-сервис
+    └── gateway-service/   # API-шлюз
 ```
 
 ## Микросервисы
@@ -37,6 +53,11 @@ API-шлюз, который маршрутизирует запросы к со
 - **Redis**: Для кэширования и управления сессиями
 - **Docker & Docker Compose**: Для контейнеризации и оркестрации
 - **JWT**: Для аутентификации
+- **Swagger/OpenAPI**: Для документации API
+- **Prometheus & Grafana**: Для мониторинга и визуализации
+- **Zap**: Для структурированного логирования
+- **GitHub Actions**: Для CI/CD
+- **Golang-migrate**: Для управления миграциями базы данных
 
 ## Запуск проекта
 
@@ -80,6 +101,38 @@ make build-chat
 make build-gateway
 ```
 
+### Тестирование
+
+```
+make test
+make test-race  # с обнаружением гонок
+```
+
+### Линтинг
+
+```
+make lint
+```
+
+### Миграции
+
+```
+make migrate-up    # Применить миграции
+make migrate-down  # Откатить миграции
+```
+
+### Сборка Docker образов
+
+```
+make docker
+```
+
+### Генерация Swagger документации
+
+```
+make swag
+```
+
 ## API Endpoints
 
 ### Auth Service
@@ -95,6 +148,17 @@ make build-gateway
 - `GET /api/chats/{id}/messages` - Получение сообщений чата
 - `POST /api/chats/{id}/messages` - Отправка сообщения в чат
 - `WS /api/ws` - WebSocket соединение для реального времени
+
+## Мониторинг
+
+- **Prometheus**: Доступен по адресу http://localhost:9090
+- **Grafana**: Доступен по адресу http://localhost:3000
+
+## CI/CD
+
+Проект настроен на использование GitHub Actions для автоматизации сборки, тестирования и деплоя:
+- **CI**: Статический анализ кода, тестирование, проверка покрытия
+- **CD**: Сборка и публикация Docker образов, автоматический деплой
 
 ## Лицензия
 

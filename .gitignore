@@ -42,4 +42,8 @@ Thumbs.db
 *.log
 
 # Docker volumes
-data/ 
+data/
+
+# Локальные конфигурации
+.env
+*.local.yml 
