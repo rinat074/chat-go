@@ -6,9 +6,9 @@ import (
 	"time"
 
 	"github.com/rinat074/chat-go/pkg/logger"
+	"github.com/rinat074/chat-go/pkg/middleware"
 	"github.com/rinat074/chat-go/proto/chat"
 	"github.com/rinat074/chat-go/services/gateway-service/pkg/clients"
-	"github.com/rinat074/chat-go/services/gateway-service/pkg/middleware"
 
 	"github.com/gorilla/websocket"
 	"go.uber.org/zap"
