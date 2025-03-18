@@ -1,4 +1,8 @@
-.PHONY: proto build-auth build-chat build-gateway build run test lint docker clean migrate-up migrate-down swag
+.PHONY: proto build-auth build-chat build-gateway build run test lint docker clean migrate-up migrate-down swag setup-workspace
+
+# Настройка Go workspace
+setup-workspace:
+	go work sync
 
 # Генерация Protocol Buffers
 proto:
@@ -7,16 +11,16 @@ proto:
 		proto/auth/*.proto proto/chat/*.proto
 
 # Сборка сервисов
-build-auth:
+build-auth: setup-workspace
 	cd services/auth-service && go build -o ../../bin/auth-service ./cmd/main.go
 
-build-chat:
+build-chat: setup-workspace
 	cd services/chat-service && go build -o ../../bin/chat-service ./cmd/main.go
 
-build-gateway:
+build-gateway: setup-workspace
 	cd services/gateway-service && go build -o ../../bin/gateway-service ./cmd/main.go
 
-build: build-auth build-chat build-gateway
+build: setup-workspace build-auth build-chat build-gateway
 
 # Запуск Docker Compose
 run:
@@ -27,16 +31,18 @@ run-local: build
 	bin/auth-service & bin/chat-service & bin/gateway-service
 
 # Тестирование
-test:
-	go test -v ./services/auth-service/... ./services/chat-service/... ./services/gateway-service/... ./proto/...
+test: setup-workspace
+	go test -v ./pkg/... ./services/auth-service/... ./services/chat-service/... ./services/gateway-service/... ./proto/...
 
 # Тестирование с race detector
-test-race:
-	go test -race -v ./services/auth-service/... ./services/chat-service/... ./services/gateway-service/... ./proto/...
+test-race: setup-workspace
+	go test -race -v ./pkg/... ./services/auth-service/... ./services/chat-service/... ./services/gateway-service/... ./proto/...
 
 # Линтер
-lint:
-	golangci-lint run ./...
+lint: setup-workspace
+	golangci-lint run ./pkg/...
+	golangci-lint run ./proto/...
+	golangci-lint run ./services/...
 
 # Сборка Docker образов
 docker:
