@@ -4,12 +4,12 @@ import (
 	"context"
 
 	"github.com/dgrijalva/jwt-go"
-	"github.com/gochat/proto/auth"
+	"github.com/rinat074/chat-go/proto/auth"
 	"google.golang.org/grpc"
 	"google.golang.org/protobuf/types/known/timestamppb"
 
-	"chat-app/services/auth-service/internal/models"
-	"chat-app/services/auth-service/internal/service"
+	"github.com/rinat074/chat-go/services/auth-service/internal/models"
+	"github.com/rinat074/chat-go/services/auth-service/internal/service"
 )
 
 type AuthServer struct {

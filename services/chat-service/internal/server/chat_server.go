@@ -3,9 +3,9 @@ package server
 import (
 	"context"
 
-	"chat-app/services/chat-service/internal/service"
+	"github.com/rinat074/chat-go/services/chat-service/internal/service"
 
-	"github.com/gochat/proto/chat"
+	"github.com/rinat074/chat-go/proto/chat"
 
 	"google.golang.org/grpc"
 	"google.golang.org/protobuf/types/known/timestamppb"

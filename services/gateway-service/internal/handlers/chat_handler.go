@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"chat-app/services/gateway-service/internal/clients"
+	"github.com/rinat074/chat-go/services/gateway-service/internal/clients"
 )
 
 type ChatHandler struct {

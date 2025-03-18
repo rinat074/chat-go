@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	"chat-app/services/chat-service/internal/cache"
-	"chat-app/services/chat-service/internal/db"
+	"github.com/rinat074/chat-go/services/chat-service/internal/cache"
+	"github.com/rinat074/chat-go/services/chat-service/internal/db"
 )
 
 // ChatService представляет сервис чата

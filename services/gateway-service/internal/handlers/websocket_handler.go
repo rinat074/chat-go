@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"time"
 
-	"chat-app/proto/chat"
-	"chat-app/services/gateway-service/internal/clients"
+	"github.com/rinat074/chat-go/proto/chat"
+	"github.com/rinat074/chat-go/services/gateway-service/internal/clients"
 
 	"github.com/gorilla/websocket"
 	"google.golang.org/protobuf/types/known/timestamppb"

@@ -3,7 +3,7 @@ package clients
 import (
 	"context"
 
-	"chat-app/proto/auth"
+	"github.com/rinat074/chat-go/proto/auth"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"

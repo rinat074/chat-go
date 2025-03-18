@@ -7,8 +7,8 @@ import (
 	"errors"
 	"time"
 
-	"chat-app/services/auth-service/internal/db"
-	"chat-app/services/auth-service/internal/models"
+	"github.com/rinat074/chat-go/services/auth-service/internal/db"
+	"github.com/rinat074/chat-go/services/auth-service/internal/models"
 
 	"github.com/dgrijalva/jwt-go"
 	"golang.org/x/crypto/bcrypt"

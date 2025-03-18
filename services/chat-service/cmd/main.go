@@ -4,11 +4,11 @@ import (
 	"log"
 	"net"
 
-	"chat-app/services/chat-service/internal/cache"
-	"chat-app/services/chat-service/internal/config"
-	"chat-app/services/chat-service/internal/db"
-	"chat-app/services/chat-service/internal/server"
-	"chat-app/services/chat-service/internal/service"
+	"github.com/rinat074/chat-go/services/chat-service/internal/cache"
+	"github.com/rinat074/chat-go/services/chat-service/internal/config"
+	"github.com/rinat074/chat-go/services/chat-service/internal/db"
+	"github.com/rinat074/chat-go/services/chat-service/internal/server"
+	"github.com/rinat074/chat-go/services/chat-service/internal/service"
 
 	"google.golang.org/grpc"
 )

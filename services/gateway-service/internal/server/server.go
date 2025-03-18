@@ -1,8 +1,8 @@
 package server
 
 import (
-	"chat-app/services/gateway-service/internal/handlers"
-	"chat-app/services/gateway-service/internal/middleware"
+	"github.com/rinat074/chat-go/services/gateway-service/internal/handlers"
+	"github.com/rinat074/chat-go/services/gateway-service/internal/middleware"
 
 	"github.com/go-chi/chi/v5"
 	chiMiddleware "github.com/go-chi/chi/v5/middleware"

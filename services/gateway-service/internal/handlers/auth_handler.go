@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"chat-app/services/gateway-service/internal/clients"
+	"github.com/rinat074/chat-go/services/gateway-service/internal/clients"
 )
 
 type AuthHandler struct {

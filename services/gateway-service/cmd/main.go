@@ -4,11 +4,11 @@ import (
 	"log"
 	"net/http"
 
-	"chat-app/services/gateway-service/internal/clients"
-	"chat-app/services/gateway-service/internal/config"
-	"chat-app/services/gateway-service/internal/handlers"
-	"chat-app/services/gateway-service/internal/middleware"
-	"chat-app/services/gateway-service/internal/server"
+	"github.com/rinat074/chat-go/services/gateway-service/internal/clients"
+	"github.com/rinat074/chat-go/services/gateway-service/internal/config"
+	"github.com/rinat074/chat-go/services/gateway-service/internal/handlers"
+	"github.com/rinat074/chat-go/services/gateway-service/internal/middleware"
+	"github.com/rinat074/chat-go/services/gateway-service/internal/server"
 )
 
 func main() {
