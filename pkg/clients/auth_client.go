@@ -4,18 +4,19 @@ import (
 	"context"
 
 	"github.com/rinat074/chat-go/proto/auth"
-
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
 
+// AuthClient клиент для взаимодействия с auth-service
 type AuthClient struct {
 	conn   *grpc.ClientConn
 	client auth.AuthServiceClient
 }
 
-func NewAuthClient(address string) (*AuthClient, error) {
-	conn, err := grpc.Dial(address, grpc.WithTransportCredentials(insecure.NewCredentials()))
+// NewAuthClient создает новый клиент для auth-service
+func NewAuthClient(addr string) (*AuthClient, error) {
+	conn, err := grpc.Dial(addr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		return nil, err
 	}
@@ -27,10 +28,7 @@ func NewAuthClient(address string) (*AuthClient, error) {
 	}, nil
 }
 
-func (c *AuthClient) Close() error {
-	return c.conn.Close()
-}
-
+// Register регистрирует нового пользователя
 func (c *AuthClient) Register(ctx context.Context, username, email, password string) (*auth.AuthResponse, error) {
 	return c.client.Register(ctx, &auth.RegisterRequest{
 		Username: username,
@@ -39,6 +37,7 @@ func (c *AuthClient) Register(ctx context.Context, username, email, password str
 	})
 }
 
+// Login выполняет вход пользователя
 func (c *AuthClient) Login(ctx context.Context, username, password, userAgent, ip string) (*auth.AuthResponse, error) {
 	return c.client.Login(ctx, &auth.LoginRequest{
 		Username:  username,
@@ -48,12 +47,7 @@ func (c *AuthClient) Login(ctx context.Context, username, password, userAgent, i
 	})
 }
 
-func (c *AuthClient) ValidateToken(ctx context.Context, token string) (*auth.ValidateTokenResponse, error) {
-	return c.client.ValidateToken(ctx, &auth.ValidateTokenRequest{
-		Token: token,
-	})
-}
-
+// RefreshToken обновляет токен
 func (c *AuthClient) RefreshToken(ctx context.Context, refreshToken, userAgent, ip string) (*auth.TokenPair, error) {
 	return c.client.RefreshToken(ctx, &auth.RefreshTokenRequest{
 		RefreshToken: refreshToken,
@@ -62,11 +56,21 @@ func (c *AuthClient) RefreshToken(ctx context.Context, refreshToken, userAgent, 
 	})
 }
 
-func (c *AuthClient) Logout(ctx context.Context, refreshToken string) error {
-	_, err := c.client.Logout(ctx, &auth.LogoutRequest{
+// Logout выполняет выход пользователя
+func (c *AuthClient) Logout(ctx context.Context, refreshToken string) (*auth.LogoutResponse, error) {
+	return c.client.Logout(ctx, &auth.LogoutRequest{
 		RefreshToken: refreshToken,
 	})
-	return err
 }
 
-// И другие методы для взаимодействия с auth-service
+// ValidateToken проверяет валидность токена
+func (c *AuthClient) ValidateToken(ctx context.Context, token string) (*auth.ValidateTokenResponse, error) {
+	return c.client.ValidateToken(ctx, &auth.ValidateTokenRequest{
+		Token: token,
+	})
+}
+
+// Close закрывает соединение
+func (c *AuthClient) Close() error {
+	return c.conn.Close()
+}

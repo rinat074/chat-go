@@ -1,9 +1,9 @@
 package main
 
 import (
-	"fmt"
+	_ "github.com/rinat074/chat-go/services/gateway-service/internal/cmd"
 )
 
 func main() {
-	fmt.Println("Temporary main function")
+	// Вся логика находится в internal/cmd/main.go
 }

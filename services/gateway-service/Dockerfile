@@ -16,7 +16,7 @@ COPY . .
 
 # Сборка приложения
 RUN cd services/gateway-service && \
-    go build -o /app/bin/gateway-service ./cmd/main.go
+    GOWORK=off go build -o /app/bin/gateway-service ./cmd/main.go
 
 # Финальный образ
 FROM alpine:latest

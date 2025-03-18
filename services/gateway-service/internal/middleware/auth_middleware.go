@@ -6,15 +6,20 @@ import (
 	"strings"
 
 	"github.com/rinat074/chat-go/services/gateway-service/internal/clients"
+	"github.com/rinat074/chat-go/services/gateway-service/pkg/logger"
 )
 
 type AuthMiddleware struct {
-	authClient *clients.AuthClient
+	clients   *clients.ServiceClients
+	log       logger.Logger
+	jwtSecret string
 }
 
-func NewAuthMiddleware(authClient *clients.AuthClient) *AuthMiddleware {
+func NewAuthMiddleware(clients *clients.ServiceClients, log logger.Logger, jwtSecret string) *AuthMiddleware {
 	return &AuthMiddleware{
-		authClient: authClient,
+		clients:   clients,
+		log:       log,
+		jwtSecret: jwtSecret,
 	}
 }
 
@@ -29,6 +34,7 @@ func (m *AuthMiddleware) Handler(next http.Handler) http.Handler {
 		// Получаем токен из заголовка
 		authHeader := r.Header.Get("Authorization")
 		if authHeader == "" {
+			m.log.Warn("отсутствует заголовок авторизации", "path", r.URL.Path)
 			http.Error(w, "Требуется авторизация", http.StatusUnauthorized)
 			return
 		}
@@ -36,23 +42,29 @@ func (m *AuthMiddleware) Handler(next http.Handler) http.Handler {
 		// Извлекаем токен из формата "Bearer <token>"
 		parts := strings.Split(authHeader, " ")
 		if len(parts) != 2 || parts[0] != "Bearer" {
+			m.log.Warn("неверный формат токена", "auth_header", authHeader)
 			http.Error(w, "Неверный формат токена", http.StatusUnauthorized)
 			return
 		}
 		token := parts[1]
 
 		// Проверяем токен через auth-service
-		resp, err := m.authClient.ValidateToken(r.Context(), token)
-		if err != nil || !resp.Valid {
+		resp, err := m.clients.AuthClient.ValidateToken(r.Context(), token)
+		if err != nil {
+			m.log.Error("ошибка проверки токена", "error", err)
+			http.Error(w, "Ошибка проверки токена", http.StatusUnauthorized)
+			return
+		}
+
+		if !resp.Valid {
+			m.log.Warn("недействительный токен", "token", token[:10]+"...")
 			http.Error(w, "Недействительный токен", http.StatusUnauthorized)
 			return
 		}
 
 		// Добавляем информацию о пользователе в контекст
-		ctx := context.WithValue(r.Context(), userContextKey, userData{
-			UserID:   resp.UserId,
-			Username: resp.Username,
-		})
+		ctx := context.WithValue(r.Context(), "userID", resp.UserId)
+		ctx = context.WithValue(ctx, "username", resp.Username)
 
 		// Продолжаем запрос с обновленным контекстом
 		next.ServeHTTP(w, r.WithContext(ctx))
@@ -66,10 +78,11 @@ func isPublicRoute(path string) bool {
 		"/api/auth/login",
 		"/api/auth/refresh",
 		"/api/csrf-token",
+		"/swagger",
 	}
 
 	for _, route := range publicRoutes {
-		if path == route {
+		if strings.HasPrefix(path, route) {
 			return true
 		}
 	}

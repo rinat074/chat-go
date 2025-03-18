@@ -2,7 +2,7 @@
 
 # Настройка Go workspace
 setup-workspace:
-	go work sync
+	@echo "Пропускаем go work sync из-за конфликтов"
 
 # Генерация Protocol Buffers
 proto:
@@ -12,13 +12,13 @@ proto:
 
 # Сборка сервисов
 build-auth: setup-workspace
-	cd services/auth-service && go build -o ../../bin/auth-service ./cmd/main.go
+	cd services/auth-service && GOWORK=off go build -o ../../bin/auth-service ./cmd/main.go
 
 build-chat: setup-workspace
-	cd services/chat-service && go build -o ../../bin/chat-service ./cmd/main.go
+	cd services/chat-service && GOWORK=off go build -o ../../bin/chat-service ./cmd/main.go
 
 build-gateway: setup-workspace
-	cd services/gateway-service && go build -o ../../bin/gateway-service ./cmd/main.go
+	cd services/gateway-service && GOWORK=off go build -o ../../bin/gateway-service ./cmd/main.go
 
 build: setup-workspace build-auth build-chat build-gateway
 
@@ -32,17 +32,17 @@ run-local: build
 
 # Тестирование
 test: setup-workspace
-	go test -v ./pkg/... ./services/auth-service/... ./services/chat-service/... ./services/gateway-service/... ./proto/...
+	GOWORK=off go test -v ./pkg/... ./services/auth-service/... ./services/chat-service/... ./services/gateway-service/... ./proto/...
 
 # Тестирование с race detector
 test-race: setup-workspace
-	go test -race -v ./pkg/... ./services/auth-service/... ./services/chat-service/... ./services/gateway-service/... ./proto/...
+	GOWORK=off go test -race -v ./pkg/... ./services/auth-service/... ./services/chat-service/... ./services/gateway-service/... ./proto/...
 
 # Линтер
 lint: setup-workspace
-	golangci-lint run ./pkg/...
-	golangci-lint run ./proto/...
-	golangci-lint run ./services/...
+	GOWORK=off golangci-lint run ./pkg/...
+	GOWORK=off golangci-lint run ./proto/...
+	GOWORK=off golangci-lint run ./services/...
 
 # Сборка Docker образов
 docker:

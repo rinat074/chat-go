@@ -36,11 +36,46 @@ func (c *ChatClient) SaveMessage(ctx context.Context, message *chat.Message) (*c
 	return c.client.SaveMessage(ctx, message)
 }
 
-func (c *ChatClient) GetPublicMessages(ctx context.Context, limit, offset int32) (*chat.MessagesResponse, error) {
+func (c *ChatClient) GetPublicMessages(ctx context.Context, limit, offset int) (*chat.MessagesResponse, error) {
 	return c.client.GetPublicMessages(ctx, &chat.GetMessagesRequest{
-		Limit:  limit,
-		Offset: offset,
+		Limit:  int32(limit),
+		Offset: int32(offset),
 	})
+}
+
+func (c *ChatClient) GetPrivateMessages(ctx context.Context, userId, receiverId int64, limit, offset int) (*chat.MessagesResponse, error) {
+	return c.client.GetPrivateMessages(ctx, &chat.GetPrivateMessagesRequest{
+		UserId:      userId,
+		OtherUserId: receiverId,
+		Limit:       int32(limit),
+		Offset:      int32(offset),
+	})
+}
+
+func (c *ChatClient) GetGroupMessages(ctx context.Context, groupId int64, limit, offset int) (*chat.MessagesResponse, error) {
+	return c.client.GetGroupMessages(ctx, &chat.GetGroupMessagesRequest{
+		GroupId: groupId,
+		UserId:  0,
+		Limit:   int32(limit),
+		Offset:  int32(offset),
+	})
+}
+
+func (c *ChatClient) CreateGroup(ctx context.Context, name, description string, creatorId int64, memberIds []int64) (*chat.Group, error) {
+	return c.client.CreateGroup(ctx, &chat.CreateGroupRequest{
+		Name:        name,
+		Description: description,
+		OwnerId:     creatorId,
+	})
+}
+
+func (c *ChatClient) AddUserToGroup(ctx context.Context, groupId, userId, requesterId int64) error {
+	_, err := c.client.AddUserToGroup(ctx, &chat.AddUserToGroupRequest{
+		GroupId: groupId,
+		UserId:  userId,
+		AdminId: requesterId,
+	})
+	return err
 }
 
 // Дополнительные методы для других функций чата
