@@ -40,7 +40,7 @@ jobs:
     - name: Set up Go
       uses: actions/setup-go@v4
       with:
-        go-version: '1.21'
+        go-version: '1.22'
 
     - name: Install Protoc
       run: |
@@ -155,7 +155,7 @@ jobs:
     - name: Set up Go
       uses: actions/setup-go@v4
       with:
-        go-version: '1.21'
+        go-version: '1.22'
 
     - name: Install Protoc
       run: |
@@ -197,19 +197,19 @@ jobs:
       run: |
         # Проверка наличия файлов перед сборкой
         if [ -d "services/auth-service/cmd" ] && [ -n "$(find services/auth-service/cmd -name "*.go" 2>/dev/null)" ]; then
-          cd services/auth-service && go build -o ../../bin/auth-service ./cmd/main.go || echo "Build failed but continuing" && cd ../../
+          cd services/auth-service && GOWORK=off go build -o ../../bin/auth-service ./cmd/main.go || echo "Build failed but continuing" && cd ../../
         else
           echo "No Go files found in services/auth-service/cmd"
         fi
         
         if [ -d "services/chat-service/cmd" ] && [ -n "$(find services/chat-service/cmd -name "*.go" 2>/dev/null)" ]; then
-          cd services/chat-service && go build -o ../../bin/chat-service ./cmd/main.go || echo "Build failed but continuing" && cd ../../
+          cd services/chat-service && GOWORK=off go build -o ../../bin/chat-service ./cmd/main.go || echo "Build failed but continuing" && cd ../../
         else
           echo "No Go files found in services/chat-service/cmd"
         fi
         
         if [ -d "services/gateway-service/cmd" ] && [ -n "$(find services/gateway-service/cmd -name "*.go" 2>/dev/null)" ]; then
-          cd services/gateway-service && go build -o ../../bin/gateway-service ./cmd/main.go || echo "Build failed but continuing" && cd ../../
+          cd services/gateway-service && GOWORK=off go build -o ../../bin/gateway-service ./cmd/main.go || echo "Build failed but continuing" && cd ../../
         else
           echo "No Go files found in services/gateway-service/cmd"
         fi
