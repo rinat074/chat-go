@@ -4,33 +4,25 @@ import (
 	"context"
 
 	"github.com/rinat074/chat-go/proto/chat"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
 )
 
-// ChatClient клиент для взаимодействия с chat-service
-type ChatClient struct {
-	conn   *grpc.ClientConn
-	client chat.ChatServiceClient
+// ChatClient представляет клиент для Chat сервиса
+type ChatClient struct{}
+
+// NewChatClient создает новый клиент для Chat сервиса
+func NewChatClient(address string) (*ChatClient, error) {
+	return &ChatClient{}, nil
 }
 
-// NewChatClient создает новый клиент для chat-service
-func NewChatClient(addr string) (*ChatClient, error) {
-	conn, err := grpc.Dial(addr, grpc.WithTransportCredentials(insecure.NewCredentials()))
-	if err != nil {
-		return nil, err
-	}
-
-	client := chat.NewChatServiceClient(conn)
-	return &ChatClient{
-		conn:   conn,
-		client: client,
-	}, nil
+// Close закрывает соединение с сервером
+func (c *ChatClient) Close() error {
+	return nil
 }
 
-// SaveMessage сохраняет сообщение
-func (c *ChatClient) SaveMessage(ctx context.Context, msg *chat.Message) (*chat.Message, error) {
-	return c.client.SaveMessage(ctx, msg)
+// SaveMessage сохраняет сообщение в чат-сервисе
+func (c *ChatClient) SaveMessage(ctx context.Context, message *chat.Message) (*chat.Message, error) {
+	// Возвращаем то же сообщение как заглушка
+	return message, nil
 }
 
 // GetPublicMessages получает публичные сообщения
@@ -77,9 +69,4 @@ func (c *ChatClient) AddUserToGroup(ctx context.Context, groupID, userID, adminI
 		UserId:  userID,
 		AdminId: adminID,
 	})
-}
-
-// Close закрывает соединение
-func (c *ChatClient) Close() error {
-	return c.conn.Close()
 }

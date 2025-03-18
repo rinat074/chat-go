@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/rinat074/chat-go/pkg/clients"
 	"github.com/rinat074/chat-go/pkg/logger"
-	"github.com/rinat074/chat-go/services/gateway-service/pkg/clients"
 	"go.uber.org/zap"
 )
 

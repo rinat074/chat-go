@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/rinat074/chat-go/pkg/clients"
 	"github.com/rinat074/chat-go/pkg/logger"
-	"github.com/rinat074/chat-go/services/gateway-service/pkg/clients"
 	"go.uber.org/zap"
 )
 
