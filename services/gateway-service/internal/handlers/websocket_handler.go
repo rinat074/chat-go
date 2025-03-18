@@ -13,6 +13,17 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
+// Ключ для контекста пользователя
+type contextKey string
+
+const userContextKey contextKey = "user"
+
+// Структура данных пользователя
+type userData struct {
+	UserID   int64
+	Username string
+}
+
 var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
