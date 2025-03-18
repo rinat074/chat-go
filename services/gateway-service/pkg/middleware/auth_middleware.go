@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"context"
 	"net/http"
 	"strings"
 )
@@ -10,6 +11,9 @@ type contextKey string
 
 // UserContextKey ключ контекста для данных пользователя
 const UserContextKey contextKey = "user"
+
+// userContextKey для обратной совместимости с pkg/handlers/websocket_handler.go
+const userContextKey = UserContextKey
 
 // UserData содержит информацию о пользователе
 type UserData struct {
@@ -33,8 +37,13 @@ func NewAuthMiddleware(authClient interface{}) *AuthMiddleware {
 func (m *AuthMiddleware) Handler(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Упрощенная версия для совместимости
-		// Реальная логика находится в internal/middleware/auth_middleware.go
-		next.ServeHTTP(w, r)
+		// Добавляем фиктивные данные пользователя для совместимости с websocket_handler.go
+		userData := UserData{
+			UserID:   1,
+			Username: "dummy_user",
+		}
+		ctx := context.WithValue(r.Context(), userContextKey, userData)
+		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }
 
