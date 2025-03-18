@@ -9,9 +9,9 @@ import (
 	"github.com/joho/godotenv"
 )
 
-// Load загружает переменные окружения из .env файла если он существует
+// Load загружает переменные окружения из .env файла если он существует.
 func Load() error {
-	// Загрузка .env файла только если он существует
+	// Загрузка .env файла только если он существует.
 	if _, err := os.Stat(".env"); err == nil {
 		if err := godotenv.Load(); err != nil {
 			return fmt.Errorf("error loading .env file: %w", err)
@@ -20,7 +20,7 @@ func Load() error {
 	return nil
 }
 
-// GetString возвращает значение переменной окружения как string
+// GetString возвращает значение переменной окружения как string.
 func GetString(key, defaultValue string) string {
 	value, exists := os.LookupEnv(key)
 	if !exists {
@@ -29,7 +29,7 @@ func GetString(key, defaultValue string) string {
 	return value
 }
 
-// GetInt возвращает значение переменной окружения как int
+// GetInt возвращает значение переменной окружения как int.
 func GetInt(key string, defaultValue int) int {
 	valueStr, exists := os.LookupEnv(key)
 	if !exists {
@@ -43,7 +43,7 @@ func GetInt(key string, defaultValue int) int {
 	return value
 }
 
-// GetFloat возвращает значение переменной окружения как float64
+// GetFloat возвращает значение переменной окружения как float64.
 func GetFloat(key string, defaultValue float64) float64 {
 	valueStr, exists := os.LookupEnv(key)
 	if !exists {
@@ -57,7 +57,7 @@ func GetFloat(key string, defaultValue float64) float64 {
 	return value
 }
 
-// GetBool возвращает значение переменной окружения как bool
+// GetBool возвращает значение переменной окружения как bool.
 func GetBool(key string, defaultValue bool) bool {
 	valueStr, exists := os.LookupEnv(key)
 	if !exists {
@@ -71,7 +71,7 @@ func GetBool(key string, defaultValue bool) bool {
 	return value
 }
 
-// GetDuration возвращает значение переменной окружения как time.Duration
+// GetDuration возвращает значение переменной окружения как time.Duration.
 func GetDuration(key string, defaultValue time.Duration) time.Duration {
 	valueStr, exists := os.LookupEnv(key)
 	if !exists {
@@ -85,7 +85,7 @@ func GetDuration(key string, defaultValue time.Duration) time.Duration {
 	return value
 }
 
-// RequireString возвращает значение переменной окружения как string или паникует если оно не установлено
+// RequireString возвращает значение переменной окружения как string или паникует если оно не установлено.
 func RequireString(key string) string {
 	value, exists := os.LookupEnv(key)
 	if !exists {

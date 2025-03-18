@@ -9,7 +9,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
-// Metrics содержит все метрики для сервиса
+// Metrics содержит все метрики для сервиса.
 type Metrics struct {
 	registry          *prometheus.Registry
 	requestCounter    *prometheus.CounterVec
@@ -22,7 +22,7 @@ type Metrics struct {
 	activeConnections prometheus.Gauge
 }
 
-// NewMetrics создает новый экземпляр метрик
+// NewMetrics создает новый экземпляр метрик.
 func NewMetrics(serviceName string) *Metrics {
 	registry := prometheus.NewRegistry()
 
@@ -111,44 +111,44 @@ func NewMetrics(serviceName string) *Metrics {
 	}
 }
 
-// ServeHTTP предоставляет HTTP обработчик для метрик Prometheus
+// ServeHTTP предоставляет HTTP обработчик для метрик Prometheus.
 func (m *Metrics) ServeHTTP(port int) error {
 	http.Handle("/metrics", promhttp.HandlerFor(m.registry, promhttp.HandlerOpts{}))
 	return http.ListenAndServe(fmt.Sprintf(":%d", port), nil)
 }
 
-// ObserveRequest наблюдает за HTTP запросом
+// ObserveRequest наблюдает за HTTP запросом.
 func (m *Metrics) ObserveRequest(method, endpoint, status string, duration time.Duration) {
 	m.requestCounter.WithLabelValues(method, endpoint, status).Inc()
 	m.requestDuration.WithLabelValues(method, endpoint).Observe(duration.Seconds())
 }
 
-// ObserveDatabaseOperation наблюдает за операцией с базой данных
+// ObserveDatabaseOperation наблюдает за операцией с базой данных.
 func (m *Metrics) ObserveDatabaseOperation(operation string, duration time.Duration) {
 	m.databaseDuration.WithLabelValues(operation).Observe(duration.Seconds())
 }
 
-// IncrementCacheHit увеличивает счетчик попаданий в кэш
+// IncrementCacheHit увеличивает счетчик попаданий в кэш.
 func (m *Metrics) IncrementCacheHit() {
 	m.cacheHits.Inc()
 }
 
-// IncrementCacheMiss увеличивает счетчик промахов в кэш
+// IncrementCacheMiss увеличивает счетчик промахов в кэш.
 func (m *Metrics) IncrementCacheMiss() {
 	m.cacheMisses.Inc()
 }
 
-// SetGoroutines устанавливает количество горутин
+// SetGoroutines устанавливает количество горутин.
 func (m *Metrics) SetGoroutines(count int) {
 	m.goroutinesGauge.Set(float64(count))
 }
 
-// SetMemoryAlloc устанавливает количество выделенной памяти
+// SetMemoryAlloc устанавливает количество выделенной памяти.
 func (m *Metrics) SetMemoryAlloc(bytes int64) {
 	m.memoryAllocGauge.Set(float64(bytes))
 }
 
-// SetActiveConnections устанавливает количество активных соединений
+// SetActiveConnections устанавливает количество активных соединений.
 func (m *Metrics) SetActiveConnections(count int) {
 	m.activeConnections.Set(float64(count))
 }

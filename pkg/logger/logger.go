@@ -14,7 +14,7 @@ var (
 	once sync.Once
 )
 
-// Init инициализирует глобальный логгер
+// Init инициализирует глобальный логгер.
 func Init(serviceName string, level string) {
 	once.Do(func() {
 		logLevel := getLogLevel(level)
@@ -46,7 +46,7 @@ func Init(serviceName string, level string) {
 	})
 }
 
-// getLogLevel преобразует строковый уровень логирования в zapcore.Level
+// getLogLevel преобразует строковый уровень логирования в zapcore.Level.
 func getLogLevel(level string) zapcore.Level {
 	switch level {
 	case "debug":
@@ -62,42 +62,42 @@ func getLogLevel(level string) zapcore.Level {
 	}
 }
 
-// Debug логирует сообщение с уровнем Debug
+// Debug логирует сообщение с уровнем Debug.
 func Debug(msg string, fields ...zap.Field) {
 	log.Debug(msg, fields...)
 }
 
-// Info логирует сообщение с уровнем Info
+// Info логирует сообщение с уровнем Info.
 func Info(msg string, fields ...zap.Field) {
 	log.Info(msg, fields...)
 }
 
-// Warn логирует сообщение с уровнем Warn
+// Warn логирует сообщение с уровнем Warn.
 func Warn(msg string, fields ...zap.Field) {
 	log.Warn(msg, fields...)
 }
 
-// Error логирует сообщение с уровнем Error
+// Error логирует сообщение с уровнем Error.
 func Error(msg string, fields ...zap.Field) {
 	log.Error(msg, fields...)
 }
 
-// Fatal логирует сообщение с уровнем Fatal и завершает программу
+// Fatal логирует сообщение с уровнем Fatal и завершает программу.
 func Fatal(msg string, fields ...zap.Field) {
 	log.Fatal(msg, fields...)
 }
 
-// WithFields возвращает новый Logger с дополнительными полями
+// WithFields возвращает новый Logger с дополнительными полями.
 func WithFields(fields ...zap.Field) *zap.Logger {
 	return log.With(fields...)
 }
 
-// WithTime добавляет поле времени к логам
+// WithTime добавляет поле времени к логам.
 func WithTime(name string, t time.Time) zap.Field {
 	return zap.Time(name, t)
 }
 
-// WithError добавляет ошибку к логам
+// WithError добавляет ошибку к логам.
 func WithError(err error) zap.Field {
 	return zap.Error(err)
 }

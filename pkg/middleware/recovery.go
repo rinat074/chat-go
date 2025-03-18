@@ -5,16 +5,17 @@ import (
 	"net/http"
 	"runtime/debug"
 
-	"github.com/rinat074/chat-go/pkg/logger"
 	"go.uber.org/zap"
+
+	"github.com/rinat074/chat-go/pkg/logger"
 )
 
-// Recovery middleware для восстановления после паники в HTTP обработчиках
+// Recovery middleware для восстановления после паники в HTTP обработчиках.
 func Recovery(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		defer func() {
 			if err := recover(); err != nil {
-				// Логирование паники и стек-трейса
+				// Логирование паники и стек-трейса.
 				stack := debug.Stack()
 				logger.Error("Recovered from panic",
 					zap.Any("error", err),
@@ -24,7 +25,7 @@ func Recovery(next http.Handler) http.Handler {
 					zap.String("remote_addr", r.RemoteAddr),
 				)
 
-				// Отправка 500 Internal Server Error клиенту
+				// Отправка 500 Internal Server Error клиенту.
 				w.Header().Set("Content-Type", "application/json")
 				w.WriteHeader(http.StatusInternalServerError)
 				_, _ = w.Write([]byte(`{"error":"Internal Server Error"}`))
@@ -34,7 +35,7 @@ func Recovery(next http.Handler) http.Handler {
 	})
 }
 
-// GRPCRecovery возвращает функцию восстановления для gRPC сервера
+// GRPCRecovery возвращает функцию восстановления для gRPC сервера.
 func GRPCRecovery() func(interface{}) error {
 	return func(p interface{}) error {
 		stack := debug.Stack()

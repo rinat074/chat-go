@@ -11,19 +11,19 @@ import (
 
 var (
 	validate *validator.Validate
-	// Регулярные выражения для валидаций
+	// Регулярные выражения для валидаций.
 	usernameRegex = regexp.MustCompile(`^[a-zA-Z0-9_-]{3,20}$`)
-	passwordRegex = regexp.MustCompile(`^.{8,}$`) // Минимум 8 символов
+	passwordRegex = regexp.MustCompile(`^.{8,}$`) // Минимум 8 символов.
 )
 
 func init() {
 	validate = validator.New()
 
-	// Регистрация кастомных валидаторов
+	// Регистрация кастомных валидаторов.
 	_ = validate.RegisterValidation("username", validateUsername)
 	_ = validate.RegisterValidation("password", validatePassword)
 
-	// Регистрация функции для получения имени поля из json-тега
+	// Регистрация функции для получения имени поля из json-тега.
 	validate.RegisterTagNameFunc(func(fld reflect.StructField) string {
 		name := strings.SplitN(fld.Tag.Get("json"), ",", 2)[0]
 		if name == "-" {
@@ -33,10 +33,10 @@ func init() {
 	})
 }
 
-// ValidateStruct валидирует структуру с помощью тегов
+// ValidateStruct валидирует структуру с помощью тегов.
 func ValidateStruct(s interface{}) error {
 	if err := validate.Struct(s); err != nil {
-		// Преобразуем ошибки валидатора в более читаемый формат
+		// Преобразуем ошибки валидатора в более читаемый формат.
 		if validationErrors, ok := err.(validator.ValidationErrors); ok {
 			messages := make([]string, 0, len(validationErrors))
 			for _, e := range validationErrors {
@@ -49,7 +49,7 @@ func ValidateStruct(s interface{}) error {
 	return nil
 }
 
-// formatError форматирует ошибку валидации в удобочитаемое сообщение
+// formatError форматирует ошибку валидации в удобочитаемое сообщение.
 func formatError(e validator.FieldError) string {
 	field := e.Field()
 	tag := e.Tag()
@@ -73,12 +73,12 @@ func formatError(e validator.FieldError) string {
 	}
 }
 
-// validateUsername проверяет, что имя пользователя соответствует требованиям
+// validateUsername проверяет, что имя пользователя соответствует требованиям.
 func validateUsername(fl validator.FieldLevel) bool {
 	return usernameRegex.MatchString(fl.Field().String())
 }
 
-// validatePassword проверяет, что пароль соответствует требованиям
+// validatePassword проверяет, что пароль соответствует требованиям.
 func validatePassword(fl validator.FieldLevel) bool {
 	return passwordRegex.MatchString(fl.Field().String())
 }
